@@ -93,7 +93,7 @@ char get_key()
 
 void blink(){
     PORTB ^= (1 << PB0);
-    _delay_ms(1000);
+    _delay_ms(DEBOUNCE_DELAY);
 }
 
 int main() {
@@ -110,11 +110,15 @@ int main() {
     lcd_charMode(NORMALSIZE);
 
     char led_string[20];
+    char num_buffer[100];
+    int buf_pos = 0;
 
     while(1){
         char key;
         blink();
         key = get_key();
+        num_buffer[buf_pos]=key;
+        buf_pos++;
         sprintf(led_string,"%c",key);
         lcd_puts(led_string);
         if(key=='+'){
