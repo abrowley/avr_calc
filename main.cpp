@@ -1,10 +1,12 @@
 #include <avr/io.h>
 #include <util/delay.h>
+#include <lcd.h>
+
 
 #define KEY_PRT 	PORTD
 #define KEY_DDR		DDRD
 #define KEY_PIN		PIND
-#define DEBOUNCE_DELAY 20
+#define DEBOUNCE_DELAY 10
 
 unsigned char keypad[4][4] = {
         {'7','8','9','/'},
@@ -96,10 +98,28 @@ void blink(){
 
 int main() {
     DDRB = 0b00000001;
+
+    lcd_init(LCD_DISP_ON);
+    lcd_clrscr();
+    lcd_set_contrast(0x00);
+    lcd_gotoxy(4,1);
+    lcd_puts("AVR CALC");
+    lcd_charMode(DOUBLESIZE);
+
+    lcd_gotoxy(0,2);
+    lcd_charMode(NORMALSIZE);
+
+    char led_string[20];
+
     while(1){
         char key;
         blink();
         key = get_key();
+        sprintf(led_string,"%c",key);
+        lcd_puts(led_string);
+        if(key=='+'){
+            lcd_gotoxy(0,2);
+        }
         asm("NOP");
     }
     return 0;

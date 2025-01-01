@@ -6,7 +6,7 @@ set(CMAKE_C_STANDARD ${CMAKE_CXX_STANDARD})
 
 
 set(MCU   atmega328p)
-set(F_CPU 1000000)
+set(F_CPU 16000000UL)
 set(BAUD  9600)
 add_definitions(-DF_CPU=${F_CPU})
 
@@ -39,9 +39,16 @@ set(CMAKE_C_FLAGS   "${CFLAGS}")
 set(CMAKE_CXX_FLAGS "${CXXFLAGS}")
 set(CMAKE_ASM_FLAGS   "${CFLAGS}")
 
-set(FUSES -U lfuse:w:0x62:m -U hfuse:w:0xd9:m -U efuse:w:0xff:m)
+set(FUSES -U lfuse:w:0xff:m -U hfuse:w:0xde:m -U efuse:w:0x05:m)
 
-add_executable(${PROJECT_NAME}  main.cpp)
+add_executable(${PROJECT_NAME}
+        main.cpp
+        lib/blink.c
+        lib/font.c
+        lib/i2c.c
+        lib/lcd.c
+)
+target_include_directories(${PROJECT_NAME} PUBLIC lib)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "${PROJECT_NAME}.elf")
 
