@@ -28,7 +28,7 @@ set(AVRDUDE  /usr/local/bin/avrdude -v)
 set(CDEBUG    "-gstabs -g2 -ggdb3")
 set(CWARN     "-Wall -Wstrict-prototypes -Wl,--gc-sections -Wl,--relax")
 set(CTUNING   "-funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -ffunction-sections -fdata-sections")
-set(COPT      "-O0 -lm -lprintf_flt")
+set(COPT      "-O0 -lm -lprintf_flt -u,vprintf")
 set(CMCU      "-mmcu=${MCU}")
 set(CDEFS     "-DF_CPU=${F_CPU} -DBAUD=${BAUD}")
 
@@ -43,10 +43,12 @@ set(FUSES -U lfuse:w:0xff:m -U hfuse:w:0xde:m -U efuse:w:0x05:m)
 
 add_executable(${PROJECT_NAME}
         main.cpp
-        lib/blink.c
+        lib/blink.cpp
         lib/font.c
         lib/i2c.c
         lib/lcd.c
+        lib/keyboard.cpp
+        lib/calculator.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC lib)
 
